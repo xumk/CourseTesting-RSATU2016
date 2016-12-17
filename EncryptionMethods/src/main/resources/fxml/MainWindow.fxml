@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import java.net.URL?>
+<AnchorPane fx:id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.MainWindowController">
+    <stylesheets>
+        <URL value="@fxml.css" />
+    </stylesheets>
+   <children>
+      <Pane fx:id="pane" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <TextArea fx:id="textArea" layoutX="6.0" layoutY="49.0" prefHeight="303.0" prefWidth="233.0" />
+            <MenuBar fx:id="menuBar" layoutY="2.0" prefHeight="25.0" prefWidth="600.0">
+              <menus>
+                <Menu fx:id="fileMenu" mnemonicParsing="false" text="Файл">
+                  <items>
+                    <MenuItem fx:id="open" mnemonicParsing="false" onAction="#openFile" text="Открыть" />
+                        <MenuItem fx:id="saveas" mnemonicParsing="false" onAction="#saveFile" text="Сохранить как" />
+                        <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#onClearTextArea" text="Очистить" />
+                        <MenuItem fx:id="exit" mnemonicParsing="false" onAction="#onActionProperty" text="Выход" />
+                  </items>
+                </Menu>
+                <Menu fx:id="encodeMenu" mnemonicParsing="false" text="Зашифровать">
+                  <items>
+                    <MenuItem fx:id="encodeMonoAlphabet" disable="true" mnemonicParsing="false" text="моноалфавитная замена" />
+                        <MenuItem fx:id="encodeHomophonyReplacement" disable="true" mnemonicParsing="false" text="гомофоническая замена" />
+                        <MenuItem fx:id="encodePolyalphabeticReplacement" disable="true" mnemonicParsing="false" text="полиалфавитная замена" />
+                        <MenuItem fx:id="encodePoligrammnayaReplacement" disable="true" mnemonicParsing="false" text="полиграммная замена" />
+                        <MenuItem fx:id="encodeVerticalPermutation" disable="true" mnemonicParsing="false" text="вертикальная перестановка с ключом" />
+                        <MenuItem fx:id="encodeBitRevers" disable="true" mnemonicParsing="false" text="побитовая перестановка" />
+                        <MenuItem fx:id="encodeVizhinerMethod" disable="true" mnemonicParsing="false" text="код Виженера" />
+                        <MenuItem fx:id="encodeXOR" disable="true" mnemonicParsing="false" text="гоммирование с ключом" />
+                  </items>
+                </Menu>
+                <Menu fx:id="decodeMenu" mnemonicParsing="false" text="Расшифровать">
+                  <items>
+                        <MenuItem fx:id="decodeMonoAlphabet" disable="true" mnemonicParsing="false" text="моноалфавитная замена" />
+                        <MenuItem fx:id="decodeHomophonyReplacement" disable="true" mnemonicParsing="false" text="гомофоническая замена" />
+                        <MenuItem fx:id="decodePolyalphabeticReplacement" disable="true" mnemonicParsing="false" text="полиалфавитная замена" />
+                        <MenuItem fx:id="decodePoligrammnayaReplacement" disable="true" mnemonicParsing="false" text="полиграммная замена" />
+                        <MenuItem fx:id="decodeVerticalPermutation" disable="true" mnemonicParsing="false" text="вертикальная перестановка с ключом" />
+                        <MenuItem fx:id="decodeBitRevers" disable="true" mnemonicParsing="false" text="побитовая перестановка" />
+                        <MenuItem fx:id="decodeVizhinerMethod" disable="true" mnemonicParsing="false" text="код Виженера" />
+                        <MenuItem fx:id="decodeXOR" disable="true" mnemonicParsing="false" text="гоммирование с ключом" />
+                  </items>
+                </Menu>
+                  <Menu fx:id="help" mnemonicParsing="false" text="Справка">
+                    <items>
+                      <MenuItem fx:id="help1" mnemonicParsing="false" onAction="#getHelpMethod" text="Помощь" />
+                    </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
