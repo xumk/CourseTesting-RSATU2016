@@ -11,7 +11,6 @@ package org.hibernate.dialect;
 
 import org.hibernate.JDBCException;
 import org.hibernate.ScrollMode;
-import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.*;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.SQLiteDialectIdentityColumnSupport;
