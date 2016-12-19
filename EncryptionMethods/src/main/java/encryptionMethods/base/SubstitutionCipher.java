@@ -70,4 +70,12 @@ public abstract class SubstitutionCipher<T> {
         }
         return -1;
     }
+
+    public static char[] getOpenAlphabet() {
+        return openAlphabet;
+    }
+
+    public static char[] getPrivateAlphabet() {
+        return privateAlphabet;
+    }
 }
