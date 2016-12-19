@@ -1,6 +1,7 @@
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.monoAlphabet.MonoAlphabetCipher;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,5 +61,20 @@ public class MonoAlphabetCipherTest {
         monoAlphabetCipher.calculationPrivateAlphabet(30);
         String encode = monoAlphabetCipher.encodeText("тест");
         assertEquals("тест", monoAlphabetCipher.decodeText(encode));
+    }
+
+    @Test
+    public void testWrongCharInEncodeAndDecodeText() {
+        monoAlphabetCipher.calculationPrivateAlphabet(1);
+        Assert.assertEquals(monoAlphabetCipher.encodeText("tttt"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(monoAlphabetCipher.encodeText("й"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(monoAlphabetCipher.encodeText("ё"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(monoAlphabetCipher.encodeText("-"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(monoAlphabetCipher.encodeText("+"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(monoAlphabetCipher.decodeText("tttt"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(monoAlphabetCipher.decodeText("й"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(monoAlphabetCipher.decodeText("ё"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(monoAlphabetCipher.decodeText("-"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(monoAlphabetCipher.decodeText("+"), "Недопустимый символ. Расшифровка не возможно");
     }
 }

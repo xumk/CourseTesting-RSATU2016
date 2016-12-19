@@ -1,6 +1,7 @@
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.bitrevers.BitReversCipher;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,5 +73,20 @@ public class BitReversCipherTest {
     @Test(expected = ClassCastException.class)
     public void testWrongArgumentForCalculationPrivateAlphabet() {
         bitReversCipher.calculationPrivateAlphabet(1213234);
+    }
+
+    @Test
+    public void testWrongCharInEncodeAndDecodeText() {
+        bitReversCipher.calculationPrivateAlphabet("54321");
+        Assert.assertEquals(bitReversCipher.encodeText("tttt"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(bitReversCipher.encodeText("й"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(bitReversCipher.encodeText("ё"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(bitReversCipher.encodeText("-"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(bitReversCipher.encodeText("+"), "Недопустимый символ. Шифрование не возможно");
+        Assert.assertEquals(bitReversCipher.decodeText("tttt"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(bitReversCipher.decodeText("й"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(bitReversCipher.decodeText("ё"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(bitReversCipher.decodeText("-"), "Недопустимый символ. Расшифровка не возможно");
+        Assert.assertEquals(bitReversCipher.decodeText("+"), "Недопустимый символ. Расшифровка не возможно");
     }
 }
