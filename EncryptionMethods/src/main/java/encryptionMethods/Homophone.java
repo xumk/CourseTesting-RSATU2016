@@ -1,4 +1,4 @@
-package sample;
+package encryptionMethods;
 
 import java.util.*;
 
