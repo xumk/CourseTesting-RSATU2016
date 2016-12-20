@@ -31,6 +31,7 @@ public class Login extends Application {
 
     private static final HashMap<String, String> logPassMap;
     private static int count = 0;
+    public static GridPane GRID;
 
     static {
         logPassMap = new HashMap<>();
@@ -42,41 +43,47 @@ public class Login extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Окно авторизации");
 
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setVgap(10);
-        grid.setHgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        GRID = new GridPane();
+        GRID.setAlignment(Pos.CENTER);
+        GRID.setVgap(10);
+        GRID.setHgap(10);
+        GRID.setPadding(new Insets(25, 25, 25, 25));
 
         Text sceneTitle = new Text("Добро пожаловать");
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(sceneTitle, 0, 0, 2, 1);
+        GRID.add(sceneTitle, 0, 0, 2, 1);
 
         Label userName = new Label("User Name: ");
-        grid.add(userName, 0, 1);
+        GRID.add(userName, 0, 1);
 
         TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
+        userTextField.setId("userName");
+        GRID.add(userTextField, 1, 1);
 
         Label password = new Label("Password: ");
-        grid.add(password, 0, 2);
+        GRID.add(password, 0, 2);
 
         PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
+        pwBox.setId("password");
+        GRID.add(pwBox, 1, 2);
 
         Button sign = new Button("Авторизоваться");
+        sign.setId("authorization");
         Button exit = new Button("Выход");
+        exit.setId("exit");
         Button registration = new Button("Регистрация");
+        registration.setId("checkIn");
 
         HBox hbSign = new HBox(10);
         hbSign.setAlignment(Pos.BOTTOM_LEFT);
         hbSign.getChildren().add(sign);
         hbSign.getChildren().add(registration);
         hbSign.getChildren().add(exit);
-        grid.add(hbSign, 1, 5);
+        GRID.add(hbSign, 1, 5);
 
         final Text actionTarget = new Text();
-        grid.add(actionTarget, 1, 6);
+        actionTarget.setId("resultAuthorization");
+        GRID.add(actionTarget, 1, 6);
 
         exit.setOnAction(event -> {
             primaryStage.close();
@@ -99,11 +106,8 @@ public class Login extends Application {
                 } else {
                     actionTarget.setFill(Color.GREEN);
                     actionTarget.setText("Пароль верный");
-                    primaryStage.close(); // закрытие формы авторизации
                     Parent root = null;
-
                     Stage stageM = new Stage();
-
                     try {
                         switch (name) {
                             case "Ивашин":
@@ -119,6 +123,8 @@ public class Login extends Application {
                         root = FXMLLoader.load(this.getClass()
                                 .getResource("/fxml/MainWindow.fxml")
                         );
+
+                        primaryStage.close(); // закрытие формы авторизации
                         Scene scene = new Scene(root, 400, 400);
                         MainWindowController.STAGE = stageM;
                        
@@ -132,7 +138,7 @@ public class Login extends Application {
             }
         });
 
-        Scene scene = new Scene(grid, 500, 275);
+        Scene scene = new Scene(GRID, 500, 275);
         primaryStage.setScene(scene);
 
         primaryStage.show();

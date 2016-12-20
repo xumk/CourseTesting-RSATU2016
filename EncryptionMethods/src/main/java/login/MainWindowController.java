@@ -15,9 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,6 +24,7 @@ import javafx.stage.StageStyle;
 import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -36,72 +35,22 @@ import java.util.ResourceBundle;
  */
 public class MainWindowController implements Initializable {
 
-    static Stage STAGE;
+    public static Stage STAGE;
+    public static List<String> nameMethods;
     static String nameMethod1;
     static String nameMethod2;
     private SubstitutionCipher bitRevers = new BitReversCipher();
     private SubstitutionCipher monoAlphabet = new MonoAlphabetCipher();
 
     @FXML
-    private Pane pane;
-    @FXML
     private TextArea textArea;
-    @FXML
-    private MenuBar menuBar;
-    @FXML
-    private Menu fileMenu;
-    @FXML
-    private MenuItem open;
-    @FXML
-    private MenuItem clear;
-    @FXML
-    private MenuItem exit;
     @FXML
     private Menu encodeMenu;
     @FXML
-    private MenuItem methodCodeOne;
-    @FXML
-    private MenuItem methodCodeTwo;
-    @FXML
-    private MenuItem methodCodeThree;
-    @FXML
-    private MenuItem methodCodeFour;
-    @FXML
-    private MenuItem methodCodeFive;
-    @FXML
-    private MenuItem methodCodeSix;
-    @FXML
-    private MenuItem methodCodeSeven;
-    @FXML
-    private MenuItem methodCodeEight;
-    @FXML
     private Menu decodeMenu;
-    @FXML
-    private MenuItem methodDecodeOne;
-    @FXML
-    private MenuItem methodDecodeTwo;
-    @FXML
-    private MenuItem methodDecodeThree;
-    @FXML
-    private MenuItem methodDecodeFour;
-    @FXML
-    private MenuItem methodDecodeFive;
-    @FXML
-    private MenuItem methodDecodeSix;
-    @FXML
-    private MenuItem methodDecodeSeven;
-    @FXML
-    private MenuItem methodDecodeEight;
-    @FXML
-    private Menu help;
-    @FXML
-    private MenuItem help1;
-    @FXML
-    private AnchorPane AnchorPane;
-    @FXML
-    private MenuItem saveas;
-    EventHandler nonMethodHandler;
-    Map<String, EventHandler> handlerMap = new HashMap<>();
+
+    private EventHandler nonMethodHandler;
+    private Map<String, EventHandler> handlerMap = new HashMap<>();
 
     {
         nonMethodHandler = event -> {
