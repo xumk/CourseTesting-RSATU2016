@@ -1,6 +1,8 @@
-package login;
+package controller;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Алексей
  */
 public class Login extends Application {
@@ -32,6 +33,7 @@ public class Login extends Application {
     private static final HashMap<String, String> logPassMap;
     private static int count = 0;
     public static GridPane GRID;
+    public Stage primaryStage;
 
     static {
         logPassMap = new HashMap<>();
@@ -41,6 +43,7 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Окно авторизации");
 
         GRID = new GridPane();
@@ -73,6 +76,7 @@ public class Login extends Application {
         exit.setId("exit");
         Button registration = new Button("Регистрация");
         registration.setId("checkIn");
+        registration.setOnAction(moveToRegistryWindow());
 
         HBox hbSign = new HBox(10);
         hbSign.setAlignment(Pos.BOTTOM_LEFT);
@@ -127,7 +131,7 @@ public class Login extends Application {
                         primaryStage.close(); // закрытие формы авторизации
                         Scene scene = new Scene(root, 400, 400);
                         MainWindowController.STAGE = stageM;
-                       
+
                         stageM.setScene(scene);
                         stageM.show();
                     } catch (IOException ex) {
@@ -142,6 +146,25 @@ public class Login extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+    }
+
+    private EventHandler<ActionEvent> moveToRegistryWindow() {
+        return event -> {
+            Parent root = null;
+            try {
+                GRID.setDisable(true);
+                root = FXMLLoader.load(this.getClass()
+                        .getResource("/fxml/Registry.fxml"));
+                Scene scene = new Scene(root, 550.0D, 400.0D);
+                Stage registryStage = new Stage();
+                registryStage.setScene(scene);
+                RegistryController.STAGE = registryStage;
+                RegistryController.parentPane = GRID;
+                registryStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
     }
 
     /**

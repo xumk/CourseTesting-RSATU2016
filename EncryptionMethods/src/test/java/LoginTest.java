@@ -1,10 +1,11 @@
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import login.Login;
+import controller.Login;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -22,12 +23,17 @@ import static org.testfx.matcher.base.NodeMatchers.hasText;
 public class LoginTest extends ApplicationTest {
     Text resultAuthorization;
     Button authorization;
+    Button registry;
     TextField userName;
     PasswordField password;
+    Stage stage;
+    GridPane gridPane;
 
     @Override
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
         new Login().start(stage);
+        gridPane = Login.GRID;
     }
 
     @Before
@@ -36,6 +42,7 @@ public class LoginTest extends ApplicationTest {
         authorization = find("#authorization");
         userName = find("#userName");
         password = find("#password");
+        registry = find("#checkIn");
     }
 
     @Test
@@ -68,6 +75,15 @@ public class LoginTest extends ApplicationTest {
             userName.clear();
             password.clear();
         }
+        assertEquals(stage.isShowing(), false);
+    }
+
+    @Test
+    public void openRegistryWindow() {
+        clickOn(registry);
+        assertEquals(gridPane.isDisable(), true);
+        waitUntil("#registryPane", visible());
+        clickOn("#back");
     }
 
     @Test
