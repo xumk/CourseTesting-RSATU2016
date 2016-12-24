@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Created by Алексей on 19.12.2016.
  */
 public class BitReversCipherTest {
-    SubstitutionCipher bitReversCipher;
+    private SubstitutionCipher bitReversCipher;
 
     @Before
     public void beforeTest() {
@@ -50,6 +50,18 @@ public class BitReversCipherTest {
         assertEquals(bitReversCipher.getPrivateAlphabet()[0], ' ');
         bitReversCipher.calculationPrivateAlphabet("31245");
         assertEquals(bitReversCipher.getPrivateAlphabet()[0], ' ');
+    }
+
+    @Test
+    public void testLastElementPrivateAlphabetAtAnyKey() {
+        bitReversCipher.calculationPrivateAlphabet("54321");
+        assertEquals(bitReversCipher.getPrivateAlphabet()[31], 'я');
+        bitReversCipher.calculationPrivateAlphabet("53241");
+        assertEquals(bitReversCipher.getPrivateAlphabet()[31], 'я');
+        bitReversCipher.calculationPrivateAlphabet("13425");
+        assertEquals(bitReversCipher.getPrivateAlphabet()[31], 'я');
+        bitReversCipher.calculationPrivateAlphabet("31245");
+        assertEquals(bitReversCipher.getPrivateAlphabet()[31], 'я');
     }
 
     @Test

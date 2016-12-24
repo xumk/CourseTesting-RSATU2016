@@ -5,14 +5,10 @@
  */
 package database.dao;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
 /**
- *
  * @author Алексей
  */
 public class DAO<T> {
@@ -24,36 +20,32 @@ public class DAO<T> {
         this.sessionFactory = sessionFactory;
         this.clazz = clazz;
     }
-    
+
     public T getEntityByStringProperty(String properties, String value) {
-        Session session = null;
         T obj = null;
-        try {
-            session = this.sessionFactory.openSession();
-            Criteria e = session.createCriteria(clazz);
-            obj = (T) e.add(Restrictions.eq(properties, value)).uniqueResult();
+        try (Session session = this.sessionFactory.openSession()) {
+            Criteria criteria = session.createCriteria(clazz);
+            obj = (T) criteria.add(Restrictions.eq(properties, value)).uniqueResult();
         } catch (Exception ex) {
-           
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return obj;
     }
-    
+
     public void addObject(T object) {
-        Session session = null;
-        try {
-            session = this.sessionFactory.openSession();
-            Transaction e = session.beginTransaction();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             session.save(object);
-            e.commit();
+            transaction.commit();
         } catch (Exception ex) {
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+        }
+    }
+
+    public void deleteObject(T object) {
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(object);
+            transaction.commit();
+        } catch (Exception var7) {
         }
     }
 }

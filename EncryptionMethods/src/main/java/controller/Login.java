@@ -1,5 +1,9 @@
 package controller;
 
+import database.dao.DAO;
+import database.entity.User;
+import database.service.DAOFactory;
+import database.service.DataBaseService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +23,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import org.hibernate.SessionFactory;
+import utils.UtilFunctions;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +41,8 @@ public class Login extends Application {
     private static int count = 0;
     public static GridPane GRID;
     public Stage primaryStage;
+    private static DAO<User> USER_DAO;
+    private static SessionFactory SESSION_FACTORY;
 
     static {
         logPassMap = new HashMap<>();
@@ -43,6 +52,7 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setOnCloseRequest(we -> SESSION_FACTORY.close());
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Окно авторизации");
 
@@ -60,7 +70,7 @@ public class Login extends Application {
         GRID.add(userName, 0, 1);
 
         TextField userTextField = new TextField();
-        userTextField.setId("userName");
+        userTextField.setId("login");
         GRID.add(userTextField, 1, 1);
 
         Label password = new Label("Password: ");
@@ -90,56 +100,55 @@ public class Login extends Application {
         GRID.add(actionTarget, 1, 6);
 
         exit.setOnAction(event -> {
-            primaryStage.close();
+            primaryStage.fireEvent(new WindowEvent(
+                    primaryStage,
+                    WindowEvent.WINDOW_CLOSE_REQUEST
+            ));
         });
 
         sign.setOnAction(event -> {
             actionTarget.setFill(Color.FIREBRICK);
             String name = userTextField.getText();
-            if (!logPassMap.containsKey(name)) {
+            User user = USER_DAO.getEntityByStringProperty("login", name);
+            if (user == null) {
                 actionTarget.setText("Такого пользователя не существует");
-            } else {
-                String passMap = logPassMap.get(name);
-                String pass = pwBox.getText();
-                if (!passMap.equals(pass)) {
-                    ++count;
-                    if (count == 3) {
-                        primaryStage.close();
-                    }
-                    actionTarget.setText("Не верный пароль");
-                } else {
-                    actionTarget.setFill(Color.GREEN);
-                    actionTarget.setText("Пароль верный");
-                    Parent root = null;
-                    Stage stageM = new Stage();
-                    try {
-                        switch (name) {
-                            case "Ивашин":
-                                MainWindowController.nameMethod1 = "MonoAlphabet";
-                                MainWindowController.nameMethod2 = "BitRevers";
-                                stageM.setTitle("Welcome, Alex");
-                                break;
-                            case "Распопова":
-                                stageM.setTitle("Welcome, Masha");
-                                MainWindowController.nameMethod1 = "PoligrammnayaReplacement";
-                                MainWindowController.nameMethod2 = "VerticalPermutation";
-                        }
-                        root = FXMLLoader.load(this.getClass()
-                                .getResource("/fxml/MainWindow.fxml")
-                        );
-
-                        primaryStage.close(); // закрытие формы авторизации
-                        Scene scene = new Scene(root, 400, 400);
-                        MainWindowController.STAGE = stageM;
-
-                        stageM.setScene(scene);
-                        stageM.show();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //TODO: сделать создание окна работы с кодами
-                }
+                return;
             }
+            String realPassword = user.getPassword();
+            String pass = UtilFunctions.md5Custom(pwBox.getText());
+            if (!realPassword.equals(pass)) {
+                ++count;
+                if (count == 3) {
+                    primaryStage.close();
+                }
+                actionTarget.setText("Не верный пароль");
+                return;
+            }
+            actionTarget.setFill(Color.GREEN);
+            actionTarget.setText("Пароль верный");
+            Parent root = null;
+            Stage stageM = new Stage();
+            try {
+                MainWindowController.nameMethods = user.getMethods();
+                String firstName = user.getFirstName().isEmpty()? "Неизвестный" : user.getFirstName();
+                stageM.setTitle("Добро пожаловать, " + firstName);
+
+                root = FXMLLoader.load(this.getClass()
+                        .getResource("/fxml/MainWindow.fxml")
+                );
+
+                primaryStage.close(); // закрытие формы авторизации
+                Scene scene = new Scene(root, 400, 400);
+                MainWindowController.STAGE = stageM;
+
+                stageM.setScene(scene);
+                stageM.show();
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //TODO: сделать создание окна работы с кодами
+
+
         });
 
         Scene scene = new Scene(GRID, 500, 275);
@@ -155,16 +164,24 @@ public class Login extends Application {
                 GRID.setDisable(true);
                 root = FXMLLoader.load(this.getClass()
                         .getResource("/fxml/Registry.fxml"));
-                Scene scene = new Scene(root, 550.0D, 400.0D);
+                Scene scene = new Scene(root, 600.0D, 400.0D);
                 Stage registryStage = new Stage();
                 registryStage.setScene(scene);
                 RegistryController.STAGE = registryStage;
                 RegistryController.parentPane = GRID;
+                RegistryController.USER_DAO = USER_DAO;
                 registryStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         };
+    }
+
+    public static void launch(String... args) {
+        DataBaseService dataBaseService = DataBaseService.instanceDataBaseService();
+        SESSION_FACTORY = dataBaseService.getSessionFactory();
+        USER_DAO = DAOFactory.getInstance(SESSION_FACTORY).getUserDao();
+        Application.launch(args);
     }
 
     /**

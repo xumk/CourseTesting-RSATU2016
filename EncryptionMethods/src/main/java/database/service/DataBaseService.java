@@ -21,7 +21,7 @@ public class DataBaseService {
     private static final String HIBERNATE_HBM2DDL_AUTO = "update";
     private static final String HIBERNATE_DIALECT = "org.hibernate.dialect.SQLiteDialect";
     private static final String HIBERNATE_CONNECTION_DRIVER = "org.sqlite.JDBC";
-    private final String CONNECTION_URL = "jdbc:sqlite:C:/database/users.db";
+    private final String CONNECTION_URL = "jdbc:sqlite:../database/users.db";
     private static final String DATABASE_USERNAME = "";
     private static final String DATABASE_PASSWORD = "";
     private final SessionFactory sessionFactory;

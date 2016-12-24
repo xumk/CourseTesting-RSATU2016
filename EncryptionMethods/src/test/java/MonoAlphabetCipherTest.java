@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Created by Алексей on 19.12.2016.
  */
 public class MonoAlphabetCipherTest {
-    SubstitutionCipher monoAlphabetCipher;
+    private SubstitutionCipher monoAlphabetCipher;
 
     @Before
     public void beforeTest() {

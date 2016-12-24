@@ -199,7 +199,7 @@ public class MainWindowController implements Initializable {
         // TODO
         encodeMenu.getItems().stream().filter(menuItem -> {
             String id = menuItem.getId();
-            return id.equals("encode" + MainWindowController.nameMethod1) || id.equals("encode" + MainWindowController.nameMethod2);
+            return nameMethods.contains(id.substring(6));
         }).forEach(it -> {
             String id = it.getId();
             it.setOnAction(getHandlerByMethodName(id));
@@ -207,7 +207,7 @@ public class MainWindowController implements Initializable {
         });
         decodeMenu.getItems().stream().filter(menuItem -> {
             String id = menuItem.getId();
-            return id.equals("decode" + MainWindowController.nameMethod1) || id.equals("decode" + MainWindowController.nameMethod2);
+            return nameMethods.contains(id.substring(6));
         }).forEach(it -> {
             String id = it.getId();
             it.setOnAction(getHandlerByMethodName(id));

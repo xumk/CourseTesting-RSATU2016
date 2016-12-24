@@ -1,6 +1,8 @@
 package database.service;
 
 import database.dao.DAO;
+import database.dao.UserDAO;
+import database.entity.User;
 import org.hibernate.SessionFactory;
 
 public class DAOFactory {
@@ -17,9 +19,13 @@ public class DAOFactory {
     private DAOFactory(SessionFactory sessionFactory) {
         DAOFactory.sessionFactory = sessionFactory;
     }
-    
-    public DAO getDaoBuClass(Class clazz) {
-        return new DAO(sessionFactory, clazz);
+
+    public <T> DAO<T> getDaoBuClass(Class clazz) {
+        return new DAO<T>(sessionFactory, clazz);
+    }
+
+    public UserDAO getUserDao() {
+        return new UserDAO(sessionFactory, User.class);
     }
 
 }
