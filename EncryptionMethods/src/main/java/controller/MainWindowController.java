@@ -20,6 +20,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
+import org.hibernate.SessionFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -35,10 +37,9 @@ import java.util.ResourceBundle;
  */
 public class MainWindowController implements Initializable {
 
+    public static SessionFactory SESSION_FACTORY;
     public static Stage STAGE;
     public static List<String> nameMethods;
-    static String nameMethod1;
-    static String nameMethod2;
     private SubstitutionCipher bitRevers = new BitReversCipher();
     private SubstitutionCipher monoAlphabet = new MonoAlphabetCipher();
 
@@ -191,6 +192,11 @@ public class MainWindowController implements Initializable {
             dialog.show();
         });
     }
+
+    public MainWindowController() {
+
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -213,6 +219,7 @@ public class MainWindowController implements Initializable {
             it.setOnAction(getHandlerByMethodName(id));
             it.setDisable(false);
         });
+        STAGE.setOnCloseRequest(we -> SESSION_FACTORY.close());
     }
 
     private EventHandler getHandlerByMethodName(String methodName) {
@@ -224,7 +231,10 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void onActionProperty(ActionEvent event) {
-        STAGE.close();
+        STAGE.fireEvent(new WindowEvent(
+                STAGE,
+                WindowEvent.WINDOW_CLOSE_REQUEST
+        ));
     }
 
     @FXML
@@ -295,17 +305,17 @@ public class MainWindowController implements Initializable {
         txtAreaHelp.appendText("Моноалфавитная замена \n");
         txtAreaHelp.appendText(
                 "При Моноалфавитной замене каждой букве открытого текста ставится соответствие одна буква \n"
-                + "закрытого текста из этого же алфавита. y_i=(K_1 X_i+K_2 ) mod n, где: n-длинна алфавита\n"
-                + "К_1 и К_2- это константы. К_1=1,К_2- это смещение \n"
-                + "сиволов закрытого алфавита относительно открытого алфавита, \n"
-                + "если К_1=1,К_2=3, то это так называемый код Цезаря. X_i- это код \n"
-                + "i символа открытого алфавита Y_i- это код i символа закрытого алфавита. \n"
+                        + "закрытого текста из этого же алфавита. y_i=(K_1 X_i+K_2 ) mod n, где: n-длинна алфавита\n"
+                        + "К_1 и К_2- это константы. К_1=1,К_2- это смещение \n"
+                        + "сиволов закрытого алфавита относительно открытого алфавита, \n"
+                        + "если К_1=1,К_2=3, то это так называемый код Цезаря. X_i- это код \n"
+                        + "i символа открытого алфавита Y_i- это код i символа закрытого алфавита. \n"
         );
         txtAreaHelp.appendText("Побитовая перестановка\n");
         txtAreaHelp.appendText(
                 "Несколько более сложной является побитовая перестановка, при которой в \n"
-                + "соответствии с вектором перестановки изменяются позиции разрядов двоичного кода \n"
-                + "символов открытого текста, обычно берутся ASCII коды. \n"
+                        + "соответствии с вектором перестановки изменяются позиции разрядов двоичного кода \n"
+                        + "символов открытого текста, обычно берутся ASCII коды. \n"
         );
 
         HBox buttons = new HBox();

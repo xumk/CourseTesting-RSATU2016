@@ -129,6 +129,8 @@ public class Login extends Application {
             Parent root = null;
             Stage stageM = new Stage();
             try {
+                MainWindowController.STAGE = stageM;
+                MainWindowController.SESSION_FACTORY = SESSION_FACTORY;
                 MainWindowController.nameMethods = user.getMethods();
                 String firstName = user.getFirstName().isEmpty()? "Неизвестный" : user.getFirstName();
                 stageM.setTitle("Добро пожаловать, " + firstName);
@@ -139,7 +141,6 @@ public class Login extends Application {
 
                 primaryStage.close(); // закрытие формы авторизации
                 Scene scene = new Scene(root, 400, 400);
-                MainWindowController.STAGE = stageM;
 
                 stageM.setScene(scene);
                 stageM.show();
