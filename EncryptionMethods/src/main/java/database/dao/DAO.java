@@ -11,12 +11,12 @@ import org.hibernate.criterion.Restrictions;
 /**
  * @author Алексей
  */
-public class DAO<T> {
+public class Dao<T> {
 
     protected SessionFactory sessionFactory;
     protected Class clazz;
 
-    public DAO(SessionFactory sessionFactory, Class clazz) {
+    public Dao(SessionFactory sessionFactory, Class clazz) {
         this.sessionFactory = sessionFactory;
         this.clazz = clazz;
     }

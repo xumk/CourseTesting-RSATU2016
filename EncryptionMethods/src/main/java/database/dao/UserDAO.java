@@ -10,8 +10,8 @@ import org.hibernate.criterion.Restrictions;
 /**
  * Created by Алексей on 24.12.2016.
  */
-public class UserDAO extends DAO<User> {
-    public UserDAO(SessionFactory sessionFactory, Class clazz) {
+public class UserDao extends Dao<User> {
+    public UserDao(SessionFactory sessionFactory, Class clazz) {
         super(sessionFactory, clazz);
     }
 

@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * FXML Controller class
@@ -40,8 +42,6 @@ public class MainWindowController implements Initializable {
     public static SessionFactory SESSION_FACTORY;
     public static Stage STAGE;
     public static List<String> nameMethods;
-    private SubstitutionCipher bitRevers = new BitReversCipher();
-    private SubstitutionCipher monoAlphabet = new MonoAlphabetCipher();
 
     @FXML
     private TextArea textArea;
@@ -50,10 +50,26 @@ public class MainWindowController implements Initializable {
     @FXML
     private Menu decodeMenu;
 
+    private SubstitutionCipher<Integer> monoAlphabet = new MonoAlphabetCipher();
+    private SubstitutionCipher<String> bitRevers = new BitReversCipher();
     private EventHandler nonMethodHandler;
-    private Map<String, EventHandler> handlerMap = new HashMap<>();
+    private Map<String, EventHandler<ActionEvent>> handlerMap = new HashMap<>();
+    private Predicate<MenuItem> filterMethods;
+    private Consumer<MenuItem> getDesiredMethods;
 
-    {
+    private void initializationPrivateField() {
+        //<editor-fold desc="Блок определения лямб для фильтрации списков меню шифрования/расшифрования" defaultstate="collapsed">
+        filterMethods = menuItem -> {
+            String id = menuItem.getId();
+            return nameMethods.contains(id.substring(6));
+        };
+        getDesiredMethods = menuItem -> {
+            String id = menuItem.getId();
+            menuItem.setOnAction(getHandlerByMethodName(id));
+            menuItem.setDisable(false);
+        };
+        //</editor-fold>
+        //<editor-fold desc="Создание обработчика для ситуции когда метод не реализован" defaultstate="collapsed" >
         nonMethodHandler = event -> {
             Stage dialog = new Stage();
             dialog.initStyle(StageStyle.UTILITY);
@@ -73,7 +89,8 @@ public class MainWindowController implements Initializable {
             dialog.setScene(scene);
             dialog.show();
         };
-
+        //</editor-fold>
+        //<editor-fold desc="Заполнения словаря обработчиков шифрования/расшифрования для реализованых методов"  defaultstate="collapsed">
         handlerMap.put("encodeMonoAlphabet", event -> {
             Stage dialog = new Stage();
             dialog.initStyle(StageStyle.UTILITY);
@@ -191,10 +208,10 @@ public class MainWindowController implements Initializable {
             dialog.setScene(scene);
             dialog.show();
         });
+        //</editor-fold>
     }
 
     public MainWindowController() {
-
     }
 
     /**
@@ -202,27 +219,13 @@ public class MainWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        encodeMenu.getItems().stream().filter(menuItem -> {
-            String id = menuItem.getId();
-            return nameMethods.contains(id.substring(6));
-        }).forEach(it -> {
-            String id = it.getId();
-            it.setOnAction(getHandlerByMethodName(id));
-            it.setDisable(false);
-        });
-        decodeMenu.getItems().stream().filter(menuItem -> {
-            String id = menuItem.getId();
-            return nameMethods.contains(id.substring(6));
-        }).forEach(it -> {
-            String id = it.getId();
-            it.setOnAction(getHandlerByMethodName(id));
-            it.setDisable(false);
-        });
+        initializationPrivateField();
+        encodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
+        decodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
         STAGE.setOnCloseRequest(we -> SESSION_FACTORY.close());
     }
 
-    private EventHandler getHandlerByMethodName(String methodName) {
+    private EventHandler<ActionEvent> getHandlerByMethodName(String methodName) {
         if (handlerMap.containsKey(methodName)) {
             return handlerMap.get(methodName);
         }

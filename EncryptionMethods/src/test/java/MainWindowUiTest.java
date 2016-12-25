@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Алексей on 22.12.2016.
  */
-public class IntegrationCipherUI extends GuiTest {
+public class MainWindowUiTest extends GuiTest {
     private static FxRobot robot;
 
     @BeforeClass

@@ -1,8 +1,8 @@
 package controller;
 
-import database.dao.DAO;
+import database.dao.Dao;
 import database.entity.User;
-import database.service.DAOFactory;
+import database.service.DaoFactory;
 import database.service.DataBaseService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -41,7 +41,7 @@ public class Login extends Application {
     private static int count = 0;
     public static GridPane GRID;
     public Stage primaryStage;
-    private static DAO<User> USER_DAO;
+    private static Dao<User> userDao;
     private static SessionFactory SESSION_FACTORY;
 
     static {
@@ -109,7 +109,7 @@ public class Login extends Application {
         sign.setOnAction(event -> {
             actionTarget.setFill(Color.FIREBRICK);
             String name = userTextField.getText();
-            User user = USER_DAO.getEntityByStringProperty("login", name);
+            User user = userDao.getEntityByStringProperty("login", name);
             if (user == null) {
                 actionTarget.setText("Такого пользователя не существует");
                 return;
@@ -170,7 +170,7 @@ public class Login extends Application {
                 registryStage.setScene(scene);
                 RegistryController.STAGE = registryStage;
                 RegistryController.parentPane = GRID;
-                RegistryController.USER_DAO = USER_DAO;
+                RegistryController.userDao = userDao;
                 registryStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -181,7 +181,7 @@ public class Login extends Application {
     public static void launch(String... args) {
         DataBaseService dataBaseService = DataBaseService.instanceDataBaseService();
         SESSION_FACTORY = dataBaseService.getSessionFactory();
-        USER_DAO = DAOFactory.getInstance(SESSION_FACTORY).getUserDao();
+        userDao = DaoFactory.getInstance(SESSION_FACTORY).getUserDao();
         Application.launch(args);
     }
 

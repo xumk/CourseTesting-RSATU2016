@@ -1,31 +1,31 @@
 package database.service;
 
-import database.dao.DAO;
-import database.dao.UserDAO;
+import database.dao.Dao;
+import database.dao.UserDao;
 import database.entity.User;
 import org.hibernate.SessionFactory;
 
-public class DAOFactory {
-    private static DAOFactory instance = null;
+public class DaoFactory {
+    private static DaoFactory instance = null;
     private static SessionFactory sessionFactory = null;
 
-    public static synchronized DAOFactory getInstance(SessionFactory sessionFactory) {
+    public static synchronized DaoFactory getInstance(SessionFactory sessionFactory) {
         if (instance == null) {
-            instance = new DAOFactory(sessionFactory);
+            instance = new DaoFactory(sessionFactory);
         }
         return instance;
     }
 
-    private DAOFactory(SessionFactory sessionFactory) {
-        DAOFactory.sessionFactory = sessionFactory;
+    private DaoFactory(SessionFactory sessionFactory) {
+        DaoFactory.sessionFactory = sessionFactory;
     }
 
-    public <T> DAO<T> getDaoBuClass(Class clazz) {
-        return new DAO<T>(sessionFactory, clazz);
+    public <T> Dao<T> getDaoBuClass(Class clazz) {
+        return new Dao<T>(sessionFactory, clazz);
     }
 
-    public UserDAO getUserDao() {
-        return new UserDAO(sessionFactory, User.class);
+    public UserDao getUserDao() {
+        return new UserDao(sessionFactory, User.class);
     }
 
 }

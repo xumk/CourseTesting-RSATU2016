@@ -1,6 +1,6 @@
 package controller;
 
-import database.dao.DAO;
+import database.dao.Dao;
 import database.entity.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -24,7 +24,7 @@ import static utils.UtilFunctions.isNull;
  * Created by Алексей on 13.06.2016.
  */
 public class RegistryController implements Initializable {
-    public static DAO<User> USER_DAO;
+    public static Dao<User> userDao;
     public static Stage STAGE;
     public static Pane parentPane;
 
@@ -106,7 +106,7 @@ public class RegistryController implements Initializable {
             return;
         }
         User user = createUser();
-        USER_DAO.addObject(user);
+        userDao.addObject(user);
         backAction();
     }
 
@@ -144,7 +144,7 @@ public class RegistryController implements Initializable {
     }
 
     private boolean isExistsUser() {
-        User user = USER_DAO.getEntityByStringProperty("login", login.getText());
+        User user = userDao.getEntityByStringProperty("login", login.getText());
         return user != null;
     }
 }

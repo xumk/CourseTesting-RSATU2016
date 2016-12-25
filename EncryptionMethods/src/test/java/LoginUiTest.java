@@ -19,7 +19,7 @@ import static org.testfx.matcher.base.NodeMatchers.hasText;
 /**
  * Created by Алексей on 20.12.2016.
  */
-public class LoginTest extends ApplicationTest {
+public class LoginUiTest extends ApplicationTest {
     private Text resultAuthorization;
     private Button authorization;
     private Button registry;
