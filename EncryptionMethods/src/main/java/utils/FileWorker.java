@@ -11,9 +11,10 @@ public abstract class FileWorker {
     public static StringBuilder readFile(File file) {
         StringBuilder result = new StringBuilder("");
         if (file != null) {
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+            try (
+                    FileInputStream fis = new FileInputStream(file);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"))
+            ) {
                 String line = reader.readLine();
                 while (line != null) {
                     result.append(line);
@@ -33,8 +34,7 @@ public abstract class FileWorker {
 
     public static boolean writeFile(File file, String text) {
         if (file != null) {
-            try {
-                FileWriter fw = new FileWriter(file);
+            try (FileWriter fw = new FileWriter(file)) {
                 fw.append(text);
                 fw.append("\n");
                 fw.flush();
