@@ -22,8 +22,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.hibernate.SessionFactory;
+import utils.FileWorker;
+import utils.alert.ErrorAlert;
+import utils.alert.InformAlert;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +35,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static utils.UtilFunctions.isNullString;
 
 /**
  * FXML Controller class
@@ -42,6 +48,7 @@ public class MainWindowController implements Initializable {
     public static SessionFactory sessionFactory;
     public static Stage stage;
     public static List<String> nameMethods;
+    public MenuItem decodeMonoAlphabet;
 
     @FXML
     private TextArea textArea;
@@ -56,6 +63,21 @@ public class MainWindowController implements Initializable {
     private Map<String, EventHandler<ActionEvent>> handlerMap = new HashMap<>();
     private Predicate<MenuItem> filterMethods;
     private Consumer<MenuItem> getDesiredMethods;
+
+    public MainWindowController() {
+
+    }
+
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        initializationPrivateField();
+        encodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
+        decodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
+        initializeStage();
+    }
 
     private void initializationPrivateField() {
         //<editor-fold desc="Блок определения лямб для фильтрации списков меню шифрования/расшифрования" defaultstate="collapsed">
@@ -79,12 +101,15 @@ public class MainWindowController implements Initializable {
             HBox buttons = new HBox();
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
+            buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
                 dialog.close();
             });
 
             buttons.getChildren().addAll(buttonOk);
-            box.getChildren().addAll(new Label("Метод не реализован"), buttons);
+            Label label = new Label("Метод не реализован");
+            label.setId("labelDialog");
+            box.getChildren().addAll(label, buttons);
             Scene scene = new Scene(box, 300, 100);
             dialog.setScene(scene);
             dialog.show();
@@ -99,8 +124,10 @@ public class MainWindowController implements Initializable {
             box.setAlignment(Pos.CENTER);
             HBox buttons = new HBox();
             TextField txtField = new TextField();
+            txtField.setId("txtFieldDialog");
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
+            buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
                 int key = Integer.valueOf(txtField.getText());
                 monoAlphabet.calculationPrivateAlphabet(key);
@@ -111,11 +138,14 @@ public class MainWindowController implements Initializable {
                 textArea.setText(codeText);
             });
             Button buttonEx = new Button("Cancel");
+            buttonEx.setId("cancelDialog");
             buttonEx.setOnAction(evt -> {
                 dialog.close();
             });
             buttons.getChildren().addAll(buttonOk, buttonEx);
-            box.getChildren().addAll(new Label("Введите ключ"), txtField, buttons);
+            Label label = new Label("Введите ключ");
+            label.setId("labelDialog");
+            box.getChildren().addAll(label, txtField, buttons);
             Scene scene = new Scene(box, 300, 100);
             dialog.setScene(scene);
             dialog.show();
@@ -129,8 +159,10 @@ public class MainWindowController implements Initializable {
             box.setAlignment(Pos.CENTER);
             HBox buttons = new HBox();
             TextField txtField = new TextField();
+            txtField.setId("txtFieldDialog");
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
+            buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
                 bitRevers.calculationPrivateAlphabet(txtField.getText());
                 dialog.close();
@@ -140,11 +172,14 @@ public class MainWindowController implements Initializable {
                 textArea.setText(codeText);
             });
             Button buttonEx = new Button("Cancel");
+            buttonEx.setId("cancelDialog");
             buttonEx.setOnAction(evt -> {
                 dialog.close();
             });
             buttons.getChildren().addAll(buttonOk, buttonEx);
-            box.getChildren().addAll(new Label("Введите ключ"), txtField, buttons);
+            Label label = new Label("Введите ключ");
+            label.setId("labelDialog");
+            box.getChildren().addAll(label, txtField, buttons);
             Scene scene = new Scene(box, 300, 100);
             dialog.setScene(scene);
             dialog.show();
@@ -158,8 +193,10 @@ public class MainWindowController implements Initializable {
             box.setAlignment(Pos.CENTER);
             HBox buttons = new HBox();
             TextField txtField = new TextField();
+            txtField.setId("txtFieldDialog");
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
+            buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
                 int key = Integer.valueOf(txtField.getText());
                 monoAlphabet.calculationPrivateAlphabet(key);
@@ -170,11 +207,14 @@ public class MainWindowController implements Initializable {
                 textArea.setText(decodeText);
             });
             Button buttonEx = new Button("Cancel");
+            buttonEx.setId("cancelDialog");
             buttonEx.setOnAction(evt -> {
                 dialog.close();
             });
             buttons.getChildren().addAll(buttonOk, buttonEx);
-            box.getChildren().addAll(new Label("Введите ключ"), txtField, buttons);
+            Label label = new Label("Введите ключ");
+            label.setId("labelDialog");
+            box.getChildren().addAll(label, txtField, buttons);
             Scene scene = new Scene(box, 300, 100);
             dialog.setScene(scene);
             dialog.show();
@@ -190,6 +230,7 @@ public class MainWindowController implements Initializable {
             TextField txtField = new TextField();
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
+            buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
                 bitRevers.calculationPrivateAlphabet(txtField.getText());
                 dialog.close();
@@ -199,11 +240,14 @@ public class MainWindowController implements Initializable {
                 textArea.setText(decodeText);
             });
             Button buttonEx = new Button("Cancel");
+            buttonEx.setId("cancelDialog");
             buttonEx.setOnAction(evt -> {
                 dialog.close();
             });
             buttons.getChildren().addAll(buttonOk, buttonEx);
-            box.getChildren().addAll(new Label("Введите ключ"), txtField, buttons);
+            Label label = new Label("Введите ключ");
+            label.setId("labelDialog");
+            box.getChildren().addAll(label, txtField, buttons);
             Scene scene = new Scene(box, 300, 100);
             dialog.setScene(scene);
             dialog.show();
@@ -211,26 +255,12 @@ public class MainWindowController implements Initializable {
         //</editor-fold>
     }
 
-    public MainWindowController() {
-
-    }
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        initializationPrivateField();
-        encodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
-        decodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
-        initializeStage();
-    }
-
     private void initializeStage() {
         if (stage == null) {
             stage = new Stage();
             stage.setTitle("Добро пожаловать,  Неизвестный");
-        };
+        }
+        ;
         stage.setOnCloseRequest(we -> sessionFactory.close());
     }
 
@@ -263,27 +293,12 @@ public class MainWindowController implements Initializable {
         fileChooser.getExtensionFilters().add(extFilter);
 
         File file = fileChooser.showOpenDialog(stage);
-
-        if (file != null) {
-            try {
-                //создаем объект FileReader для объекта File
-                FileInputStream fis = new FileInputStream(file); //создаем BufferedReader с существующего FileReader для построчного считывания
-                BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8")); // считаем сначала первую строку
-                String line = reader.readLine();
-                StringBuilder sb = new StringBuilder();
-                while (line != null) {
-                    sb.append(line);
-                    // считываем остальные строки в цикле
-                    line = reader.readLine();
-                }
-                textArea.setText(sb.toString());
-            } catch (FileNotFoundException e) {
-                System.out.println("Файл не найден");
-            } catch (IOException e) {
-                System.out.println("Исключение: " + e.getMessage());
-            }
-        }
-
+        String str = FileWorker.readFile(file).toString();
+        Alert alert = (isNullString(str) || str.equals("Файл не найден")) ?
+                new ErrorAlert("Ошибка чтения файла: " + (isNullString(str) ? "Смотрите лог" : str))
+                : new InformAlert("Файл прочитан.");
+        textArea.setText(str);
+        alert.showAndWait();
     }
 
     @FXML
@@ -293,18 +308,10 @@ public class MainWindowController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.txt)", "*.txt");//Расширение 
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(stage);//Указываем текущую сцену
-        if (file != null) {
-            try {
-                FileWriter fw = new FileWriter(file);
-                fw.append(textArea.getText());
-                fw.append("\n"); //переходим на новую строку
-                fw.flush();
-                fw.close();
-            } catch (Exception ex) {
-                System.out.println(ex.toString()); //чтобы хоть что-то знать о возможной ошибке
-            }
-
-        }
+        boolean result = FileWorker.writeFile(file, textArea.getText());
+        Alert alert = result ? new ErrorAlert("Ошибка записи в файл: Смотрите лог")
+                : new InformAlert("Текст записан в файл");
+        alert.showAndWait();
     }
 
     @FXML
