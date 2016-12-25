@@ -11,6 +11,10 @@ public abstract class UtilFunctions {
     private static MessageDigest messageDigest;
 
     public static String md5Custom(String st) {
+        if (isNullString(st)) {
+            return "";
+        }
+
         byte[] digest = new byte[0];
         try {
             messageDigest = MessageDigest.getInstance("MD5");
@@ -33,7 +37,7 @@ public abstract class UtilFunctions {
         return md5Hex;
     }
 
-    public static boolean isNull(String value) {
+    public static boolean isNullString(String value) {
         return value == null || value.trim().isEmpty();
     }
 }

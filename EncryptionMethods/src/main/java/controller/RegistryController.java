@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 import static javafx.collections.FXCollections.observableArrayList;
-import static utils.UtilFunctions.isNull;
+import static utils.UtilFunctions.isNullString;
 
 /**
  * Created by Алексей on 13.06.2016.
@@ -114,8 +114,8 @@ public class RegistryController implements Initializable {
         User user = new User();
         user.setLogin(login.getText());
         user.setPassword(UtilFunctions.md5Custom(password.getText()));
-        String firstName = isNull(this.firstName.getText())? "" : this.firstName.getText();
-        String lastName =isNull(this.lastName.getText()) ? "" : this.lastName.getText();
+        String firstName = isNullString(this.firstName.getText())? "" : this.firstName.getText();
+        String lastName = isNullString(this.lastName.getText()) ? "" : this.lastName.getText();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         Method first, second;

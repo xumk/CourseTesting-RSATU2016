@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static utils.UtilFunctions.isNull;
+import static utils.UtilFunctions.isNullString;
 
 /**
  * @author Алексей
@@ -141,7 +141,7 @@ public class Login extends Application {
                 MainWindowController.stage = mainWindowStage;
                 MainWindowController.sessionFactory = sessionFactory;
                 MainWindowController.nameMethods = user.getMethods();
-                String firstName = isNull(user.getFirstName()) ? "Неизвестный" : user.getFirstName();
+                String firstName = isNullString(user.getFirstName()) ? "Неизвестный" : user.getFirstName();
                 mainWindowStage.setTitle("Добро пожаловать, " + firstName);
 
                 root = FXMLLoader.load(this.getClass()
