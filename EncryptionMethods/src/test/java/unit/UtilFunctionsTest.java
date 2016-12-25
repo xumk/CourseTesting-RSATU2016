@@ -3,6 +3,7 @@ package unit;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static utils.UtilFunctions.isNullString;
 import static utils.UtilFunctions.md5Custom;
 
 /**
@@ -23,5 +24,15 @@ public class UtilFunctionsTest {
     @Test
     public void md5NullArgument() {
         assertEquals(md5Custom(null), "");
+    }
+
+    @Test
+    public void isNullStringTest() {
+        assertEquals(isNullString(null), true);
+        assertEquals(isNullString(""), true);
+        assertEquals(isNullString("          "), true);
+        assertEquals(isNullString("    dsfsdf   "), false);
+        assertEquals(isNullString("тестовое значение"), false);
+        assertEquals(isNullString(" "), true);
     }
 }
