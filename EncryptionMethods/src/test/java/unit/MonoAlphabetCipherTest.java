@@ -1,3 +1,5 @@
+package unit;
+
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.monoAlphabet.MonoAlphabetCipher;
 import org.junit.After;

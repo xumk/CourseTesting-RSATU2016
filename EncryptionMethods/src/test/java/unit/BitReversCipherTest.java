@@ -1,3 +1,5 @@
+package unit;
+
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.bitrevers.BitReversCipher;
 import org.junit.After;

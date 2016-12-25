@@ -28,31 +28,45 @@ import org.hibernate.SessionFactory;
 import utils.UtilFunctions;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static utils.UtilFunctions.isNull;
 
 /**
  * @author Алексей
  */
 public class Login extends Application {
 
-    private static final HashMap<String, String> logPassMap;
     private static int count = 0;
+    private EventHandler<ActionEvent> exitHandler;
+    private WindowEvent exitWindow;
     public static GridPane GRID;
     public Stage primaryStage;
     private static Dao<User> userDao;
-    private static SessionFactory SESSION_FACTORY;
+    public static SessionFactory sessionFactory;
 
     static {
-        logPassMap = new HashMap<>();
-        logPassMap.put("Ивашин", "yui");
-        logPassMap.put("Распопова", "ghj");
+        createEntityForDateBaseWork();
+    }
+
+    {
+        exitWindow = new WindowEvent(
+                primaryStage,
+                WindowEvent.WINDOW_CLOSE_REQUEST
+        );
+        exitHandler = event -> primaryStage.fireEvent(exitWindow);
+    }
+
+    private static void createEntityForDateBaseWork() {
+        DataBaseService dataBaseService = DataBaseService.instanceDataBaseService();
+        sessionFactory = dataBaseService.getSessionFactory();
+        userDao = DaoFactory.getInstance(sessionFactory).getUserDao();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setOnCloseRequest(we -> SESSION_FACTORY.close());
+        primaryStage.setOnCloseRequest(we -> sessionFactory.close());
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Окно авторизации");
 
@@ -99,12 +113,7 @@ public class Login extends Application {
         actionTarget.setId("resultAuthorization");
         GRID.add(actionTarget, 1, 6);
 
-        exit.setOnAction(event -> {
-            primaryStage.fireEvent(new WindowEvent(
-                    primaryStage,
-                    WindowEvent.WINDOW_CLOSE_REQUEST
-            ));
-        });
+        exit.setOnAction(exitHandler);
 
         sign.setOnAction(event -> {
             actionTarget.setFill(Color.FIREBRICK);
@@ -119,7 +128,7 @@ public class Login extends Application {
             if (!realPassword.equals(pass)) {
                 ++count;
                 if (count == 3) {
-                    primaryStage.close();
+                    primaryStage.fireEvent(exitWindow);
                 }
                 actionTarget.setText("Не верный пароль");
                 return;
@@ -127,13 +136,13 @@ public class Login extends Application {
             actionTarget.setFill(Color.GREEN);
             actionTarget.setText("Пароль верный");
             Parent root = null;
-            Stage stageM = new Stage();
+            Stage mainWindowStage = new Stage();
             try {
-                MainWindowController.STAGE = stageM;
-                MainWindowController.SESSION_FACTORY = SESSION_FACTORY;
+                MainWindowController.stage = mainWindowStage;
+                MainWindowController.sessionFactory = sessionFactory;
                 MainWindowController.nameMethods = user.getMethods();
-                String firstName = user.getFirstName().isEmpty()? "Неизвестный" : user.getFirstName();
-                stageM.setTitle("Добро пожаловать, " + firstName);
+                String firstName = isNull(user.getFirstName()) ? "Неизвестный" : user.getFirstName();
+                mainWindowStage.setTitle("Добро пожаловать, " + firstName);
 
                 root = FXMLLoader.load(this.getClass()
                         .getResource("/fxml/MainWindow.fxml")
@@ -142,14 +151,11 @@ public class Login extends Application {
                 primaryStage.close(); // закрытие формы авторизации
                 Scene scene = new Scene(root, 400, 400);
 
-                stageM.setScene(scene);
-                stageM.show();
+                mainWindowStage.setScene(scene);
+                mainWindowStage.show();
             } catch (IOException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //TODO: сделать создание окна работы с кодами
-
-
         });
 
         Scene scene = new Scene(GRID, 500, 275);
@@ -176,13 +182,6 @@ public class Login extends Application {
                 e.printStackTrace();
             }
         };
-    }
-
-    public static void launch(String... args) {
-        DataBaseService dataBaseService = DataBaseService.instanceDataBaseService();
-        SESSION_FACTORY = dataBaseService.getSessionFactory();
-        userDao = DaoFactory.getInstance(SESSION_FACTORY).getUserDao();
-        Application.launch(args);
     }
 
     /**

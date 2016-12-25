@@ -1,3 +1,5 @@
+package integration;
+
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.bitrevers.BitReversCipher;
 import encryptionMethods.monoAlphabet.MonoAlphabetCipher;

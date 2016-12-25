@@ -16,10 +16,10 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login", unique = true)
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "firstName")
@@ -29,7 +29,7 @@ public class User implements Serializable {
     private String lastName;
 
     @ElementCollection
-    @Column(name="methods")
+    @Column(name="methods", nullable = false)
     private List<String> methods = new ArrayList<>();
 
     public User() {

@@ -39,8 +39,8 @@ import java.util.function.Predicate;
  */
 public class MainWindowController implements Initializable {
 
-    public static SessionFactory SESSION_FACTORY;
-    public static Stage STAGE;
+    public static SessionFactory sessionFactory;
+    public static Stage stage;
     public static List<String> nameMethods;
 
     @FXML
@@ -52,7 +52,7 @@ public class MainWindowController implements Initializable {
 
     private SubstitutionCipher<Integer> monoAlphabet = new MonoAlphabetCipher();
     private SubstitutionCipher<String> bitRevers = new BitReversCipher();
-    private EventHandler nonMethodHandler;
+    private EventHandler<ActionEvent> nonMethodHandler;
     private Map<String, EventHandler<ActionEvent>> handlerMap = new HashMap<>();
     private Predicate<MenuItem> filterMethods;
     private Consumer<MenuItem> getDesiredMethods;
@@ -61,7 +61,7 @@ public class MainWindowController implements Initializable {
         //<editor-fold desc="Блок определения лямб для фильтрации списков меню шифрования/расшифрования" defaultstate="collapsed">
         filterMethods = menuItem -> {
             String id = menuItem.getId();
-            return nameMethods.contains(id.substring(6));
+            return (nameMethods != null) && nameMethods.contains(id.substring(6));
         };
         getDesiredMethods = menuItem -> {
             String id = menuItem.getId();
@@ -212,6 +212,7 @@ public class MainWindowController implements Initializable {
     }
 
     public MainWindowController() {
+
     }
 
     /**
@@ -222,8 +223,17 @@ public class MainWindowController implements Initializable {
         initializationPrivateField();
         encodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
         decodeMenu.getItems().stream().filter(filterMethods).forEach(getDesiredMethods);
-        STAGE.setOnCloseRequest(we -> SESSION_FACTORY.close());
+        initializeStage();
     }
+
+    private void initializeStage() {
+        if (stage == null) {
+            stage = new Stage();
+            stage.setTitle("Добро пожаловать,  Неизвестный");
+        };
+        stage.setOnCloseRequest(we -> sessionFactory.close());
+    }
+
 
     private EventHandler<ActionEvent> getHandlerByMethodName(String methodName) {
         if (handlerMap.containsKey(methodName)) {
@@ -234,8 +244,8 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void onActionProperty(ActionEvent event) {
-        STAGE.fireEvent(new WindowEvent(
-                STAGE,
+        stage.fireEvent(new WindowEvent(
+                stage,
                 WindowEvent.WINDOW_CLOSE_REQUEST
         ));
     }
@@ -252,7 +262,7 @@ public class MainWindowController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.txt)", "*.txt");//Расширение 
         fileChooser.getExtensionFilters().add(extFilter);
 
-        File file = fileChooser.showOpenDialog(STAGE);
+        File file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
             try {
@@ -282,7 +292,7 @@ public class MainWindowController implements Initializable {
         fileChooser.setTitle("Save Document");//Заголовок диалога 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.txt)", "*.txt");//Расширение 
         fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showSaveDialog(STAGE);//Указываем текущую сцену 
+        File file = fileChooser.showSaveDialog(stage);//Указываем текущую сцену
         if (file != null) {
             try {
                 FileWriter fw = new FileWriter(file);
