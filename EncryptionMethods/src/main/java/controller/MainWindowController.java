@@ -57,10 +57,10 @@ public class MainWindowController implements Initializable {
     @FXML
     private Menu decodeMenu;
 
-    private SubstitutionCipher<Integer> monoAlphabet = new MonoAlphabetCipher();
-    private SubstitutionCipher<String> bitRevers = new BitReversCipher();
+    private SubstitutionCipher<Integer> monoAlphabet;
+    private SubstitutionCipher<String> bitRevers;
     private EventHandler<ActionEvent> nonMethodHandler;
-    private Map<String, EventHandler<ActionEvent>> handlerMap = new HashMap<>();
+    private Map<String, EventHandler<ActionEvent>> handlerMap;
     private Predicate<MenuItem> filterMethods;
     private Consumer<MenuItem> getDesiredMethods;
 
@@ -80,6 +80,9 @@ public class MainWindowController implements Initializable {
     }
 
     private void initializationPrivateField() {
+        monoAlphabet = new MonoAlphabetCipher();
+        bitRevers = new BitReversCipher();
+        handlerMap = new HashMap<>();
         //<editor-fold desc="Блок определения лямб для фильтрации списков меню шифрования/расшифрования" defaultstate="collapsed">
         filterMethods = menuItem -> {
             String id = menuItem.getId();
@@ -129,7 +132,7 @@ public class MainWindowController implements Initializable {
             Button buttonOk = new Button("Ok");
             buttonOk.setId("okDialog");
             buttonOk.setOnAction((ActionEvent evt) -> {
-                int key = Integer.valueOf(txtField.getText());
+                Integer key = Integer.valueOf(txtField.getText());
                 monoAlphabet.calculationPrivateAlphabet(key);
                 dialog.close();
                 String codeText = monoAlphabet
@@ -228,6 +231,7 @@ public class MainWindowController implements Initializable {
             box.setAlignment(Pos.CENTER);
             HBox buttons = new HBox();
             TextField txtField = new TextField();
+            txtField.setId("txtFieldDialog");
             buttons.setAlignment(Pos.CENTER);
             Button buttonOk = new Button("Ok");
             buttonOk.setId("okDialog");

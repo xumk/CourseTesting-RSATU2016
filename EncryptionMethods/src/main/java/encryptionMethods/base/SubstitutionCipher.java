@@ -5,9 +5,9 @@ package encryptionMethods.base;
  */
 public abstract class SubstitutionCipher<T> {
     // Откртый алфавит
-    protected static final char[] openAlphabet = new char[32];
+    protected final char[] openAlphabet = new char[32];
     // Закрытый алфавит
-    protected static final char[] privateAlphabet = new char[32];
+    protected final char[] privateAlphabet = new char[32];
 
     public SubstitutionCipher() {
         createOpenAlphabet();
@@ -71,11 +71,11 @@ public abstract class SubstitutionCipher<T> {
         return -1;
     }
 
-    public static char[] getOpenAlphabet() {
+    public char[] getOpenAlphabet() {
         return openAlphabet;
     }
 
-    public static char[] getPrivateAlphabet() {
+    public char[] getPrivateAlphabet() {
         return privateAlphabet;
     }
 }

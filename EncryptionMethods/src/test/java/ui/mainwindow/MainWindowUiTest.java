@@ -4,14 +4,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
-import org.testfx.api.FxRobot;
+import ui.custom.CustomMainWindowUiTest;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
@@ -19,21 +15,8 @@ import static org.testfx.matcher.base.NodeMatchers.hasText;
 /**
  * Created by Алексей on 22.12.2016.
  */
-public class MainWindowUiTest extends GuiTest {
-    private static FxRobot robot;
-    protected static List<String> methodNames;
-
+public class MainWindowUiTest extends CustomMainWindowUiTest {
     private TextArea textArea;
-
-    @BeforeClass
-    public static void createRobot() {
-        robot = new FxRobot();
-        methodNames = Arrays.asList(
-                "MonoAlphabet", "HomophonyReplacement", "PolyalphabeticReplacement",
-                "PoligrammnayaReplacement", "VerticalPermutation", "BitRevers",
-                "VizhinerMethod", "XOR"
-        );
-    }
 
     @Before
     public void findTextArea() {
@@ -67,7 +50,6 @@ public class MainWindowUiTest extends GuiTest {
 
     @Test
     public void clickAllDecodeMenuTest() {
-        find("#decodeMenu");
         robot.clickOn("#decodeMenu");
         clickAllMethodsMenu("decode");
         robot.clickOn("#decodeMenu");

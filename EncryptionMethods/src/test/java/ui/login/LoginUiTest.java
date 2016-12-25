@@ -2,6 +2,7 @@ package ui.login;
 
 import javafx.scene.paint.Color;
 import org.junit.Test;
+import ui.custom.LoginUiCustomTest;
 
 import static controller.Login.sessionFactory;
 import static org.junit.Assert.assertEquals;

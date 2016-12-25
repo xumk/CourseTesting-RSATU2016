@@ -1,25 +1,30 @@
-package integration;
+package unit.integration;
 
 import encryptionMethods.base.SubstitutionCipher;
 import encryptionMethods.bitrevers.BitReversCipher;
 import encryptionMethods.monoAlphabet.MonoAlphabetCipher;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * Created by Алексей on 22.12.2016.
  */
 public class IntegrationCipherTest {
-    private SubstitutionCipher<Integer> monoAlphabet;
-    private SubstitutionCipher<String> bitRevers;
+    private static SubstitutionCipher<Integer> monoAlphabet;
+    private static SubstitutionCipher<String> bitRevers;
     private String actualText;
+
+    @BeforeClass
+    public static void test() {
+        monoAlphabet = new MonoAlphabetCipher();
+        bitRevers = new BitReversCipher();
+    }
 
     @Before
     public void createCipherClass() {
-        monoAlphabet = new MonoAlphabetCipher();
-        bitRevers = new BitReversCipher();
-        actualText = "тест текст";
+        actualText = "специальныи текст для тестов";
     }
 
     @Test
@@ -47,22 +52,29 @@ public class IntegrationCipherTest {
     @Test
     public void  integrationDeepCipherEqualsTest() {
         monoAlphabet.calculationPrivateAlphabet(2);
-        bitRevers.calculationPrivateAlphabet("53241");
         String expectedText = monoAlphabet.encodeText(actualText);
+
+        bitRevers.calculationPrivateAlphabet("53241");
         expectedText = bitRevers.encodeText(expectedText);
-        Assert.assertEquals(expectedText, actualText);
+        Assert.assertNotEquals(expectedText, actualText);
+
         monoAlphabet.calculationPrivateAlphabet(3);
-        bitRevers.calculationPrivateAlphabet("24531");
         expectedText = monoAlphabet.decodeText(expectedText);
+
+        bitRevers.calculationPrivateAlphabet("24531");
         expectedText = bitRevers.decodeText(expectedText);
         Assert.assertNotEquals(expectedText, actualText);
-        expectedText = monoAlphabet.encodeText(expectedText);
+
         expectedText = bitRevers.encodeText(expectedText);
-        Assert.assertEquals(expectedText, actualText);
-        monoAlphabet.calculationPrivateAlphabet(2);
+        expectedText = monoAlphabet.encodeText(expectedText);
+        Assert.assertNotEquals(expectedText, actualText);
+
         bitRevers.calculationPrivateAlphabet("53241");
-        expectedText = monoAlphabet.decodeText(actualText);
         expectedText = bitRevers.decodeText(expectedText);
+
+        monoAlphabet.calculationPrivateAlphabet(2);
+        expectedText = monoAlphabet.decodeText(expectedText);
+
         Assert.assertEquals(expectedText, actualText);
     }
 }

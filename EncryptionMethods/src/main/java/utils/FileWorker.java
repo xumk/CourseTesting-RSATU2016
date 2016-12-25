@@ -12,7 +12,7 @@ public abstract class FileWorker {
         StringBuilder result = new StringBuilder("");
         if (file != null) {
             try (
-                    FileInputStream fis = new FileInputStream(file);
+                    InputStream fis = new FileInputStream(file);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"))
             ) {
                 String line = reader.readLine();

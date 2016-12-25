@@ -1,4 +1,4 @@
-package ui.login;
+package ui.custom;
 
 import controller.Login;
 import javafx.scene.control.Button;
