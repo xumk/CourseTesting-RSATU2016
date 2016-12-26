@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 
 import static controller.Login.GRID;
-import static controller.Login.sessionFactory;
 import static org.junit.Assert.assertEquals;
 import static org.loadui.testfx.GuiTest.find;
 import static org.loadui.testfx.GuiTest.waitUntil;
@@ -41,7 +40,6 @@ public abstract class LoginUiCustomTest extends ApplicationTest {
     }
 
     protected void openRegistryWindowAndTest() {
-        assertEquals(sessionFactory.isClosed(), false);
         clickOn(registry);
         assertEquals(gridPane.isDisable(), true);
         waitUntil("#registryPane", visible());

@@ -1,6 +1,7 @@
 package ui.login;
 
 import javafx.scene.paint.Color;
+import org.junit.Before;
 import org.junit.Test;
 import ui.custom.LoginUiCustomTest;
 
@@ -15,6 +16,11 @@ import static org.testfx.matcher.base.NodeMatchers.hasText;
  * Created by Алексей on 20.12.2016.
  */
 public class LoginUiTest extends LoginUiCustomTest {
+
+    @Before
+    public void checkOpenSession() {
+        assertEquals(sessionFactory.isClosed(), false);
+    }
 
     @Test
     public void openMainWindowTest() {

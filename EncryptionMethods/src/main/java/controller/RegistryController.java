@@ -92,6 +92,7 @@ public class RegistryController implements Initializable {
         this.firstName.clear();
         this.lastName.clear();
         this.password.clear();
+        this.outputErrorText.setText("");
     }
 
     public void singUpAction() {
@@ -131,13 +132,13 @@ public class RegistryController implements Initializable {
 
     private boolean isValidFields() {
         boolean result = true;
-        errorText = new StringBuilder();
-        if (login.getText().isEmpty()) {
-            errorText.append("Логин; ");
+        errorText = new StringBuilder("");
+        if (isNullString(login.getText())) {
+            errorText = errorText.append("Логин; ");
             result = false;
         }
-        if (password.getText().isEmpty()) {
-            errorText.append("Пароль; ");
+        if (isNullString(password.getText())) {
+            errorText=  errorText.append("Пароль; ");
             result = false;
         }
         return result;
