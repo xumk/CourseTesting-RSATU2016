@@ -10,7 +10,11 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 
 import static controller.Login.GRID;
+import static controller.Login.sessionFactory;
+import static org.junit.Assert.assertEquals;
 import static org.loadui.testfx.GuiTest.find;
+import static org.loadui.testfx.GuiTest.waitUntil;
+import static org.loadui.testfx.controls.impl.VisibleNodesMatcher.visible;
 
 /**
  * Created by Алексей on 25.12.2016.
@@ -34,5 +38,17 @@ public abstract class LoginUiCustomTest extends ApplicationTest {
         userName = find("#login");
         password = find("#password");
         registry = find("#checkIn");
+    }
+
+    protected void openRegistryWindowAndTest() {
+        assertEquals(sessionFactory.isClosed(), false);
+        clickOn(registry);
+        assertEquals(gridPane.isDisable(), true);
+        waitUntil("#registryPane", visible());
+    }
+
+    protected void closeRegistryWindowAndTest() {
+        clickOn("#back");
+        assertEquals(gridPane.isDisable(), false);
     }
 }

@@ -17,14 +17,6 @@ import static org.testfx.matcher.base.NodeMatchers.hasText;
 public class LoginUiTest extends LoginUiCustomTest {
 
     @Test
-    public void thisUserDoesntExist() {
-        clickOn(userName).write("NotUser");
-        clickOn(password).write("1");
-        clickOn(authorization);
-        verifyThat(resultAuthorization, hasText("Такого пользователя не существует"));
-    }
-
-    @Test
     public void openMainWindowTest() {
         assertEquals(sessionFactory.isClosed(), false);
         clickOn(userName).write("Aleksey");
@@ -46,20 +38,17 @@ public class LoginUiTest extends LoginUiCustomTest {
     }
 
     @Test
-    public void openRegistryWindow() {
-        assertEquals(sessionFactory.isClosed(), false);
-        clickOn(registry);
-        assertEquals(gridPane.isDisable(), true);
-        waitUntil("#registryPane", visible());
-        clickOn("#back");
+    public void openRegistryWindowTest() {
+        openRegistryWindowAndTest();
+        closeRegistryWindowAndTest();
     }
 
     @Test
-    public void wrongLoginAuthorizationTest() {
+    public void thisUserDoesntExistTest() {
         assertEquals(sessionFactory.isClosed(), false);
-        clickOn("#login").write("ТестНик");
-        clickOn("#password").write("tttt");
-        clickOn("#authorization");
+        clickOn(userName).write("ТестНик");
+        clickOn(password).write("tttt");
+        clickOn(authorization);
         verifyThat(resultAuthorization, hasText("Такого пользователя не существует"));
         assertEquals(resultAuthorization.getFill(), Color.FIREBRICK);
     }
