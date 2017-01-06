@@ -43,12 +43,8 @@ public class Login extends Application {
     private WindowEvent exitWindow;
     public static GridPane GRID;
     public Stage primaryStage;
-    private static Dao<User> userDao;
+    public static Dao<User> userDao;
     public static SessionFactory sessionFactory;
-
-    static {
-        createEntityForDateBaseWork();
-    }
 
     {
         exitWindow = new WindowEvent(
@@ -188,6 +184,7 @@ public class Login extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        createEntityForDateBaseWork();
         launch(args);
     }
 

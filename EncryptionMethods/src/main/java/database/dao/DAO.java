@@ -32,20 +32,31 @@ public class Dao<T> {
     }
 
     public void addObject(T object) {
+        Transaction transaction = null;
         try (Session session = this.sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(object);
             transaction.commit();
         } catch (Exception ex) {
+            rollback(transaction);
         }
     }
 
-    public void deleteObject(T object) {
+    public void deleteObject(Long id) {
+        Transaction transaction = null;
         try (Session session = this.sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
+            T object = (T) session.load(clazz, id);
             session.delete(object);
             transaction.commit();
         } catch (Exception var7) {
+            rollback(transaction);
+        }
+    }
+
+    private void rollback(Transaction transaction) {
+        if (transaction != null) {
+            transaction.rollback();
         }
     }
 }

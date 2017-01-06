@@ -15,6 +15,7 @@ public class UserDao extends Dao<User> {
         super(sessionFactory, clazz);
     }
 
+    @Override
     public User getEntityByStringProperty(String properties, String value) {
         User user = null;
         try (Session session = this.sessionFactory.openSession()) {

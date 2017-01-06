@@ -17,7 +17,7 @@
                 <Menu fx:id="fileMenu" mnemonicParsing="false" text="Файл">
                   <items>
                     <MenuItem fx:id="open" mnemonicParsing="false" onAction="#openFile" text="Открыть" />
-                        <MenuItem fx:id="saveas" mnemonicParsing="false" onAction="#saveFile" text="Сохранить как" />
+                        <MenuItem fx:id="save" mnemonicParsing="false" onAction="#saveFile" text="Сохранить как" />
                         <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#onClearTextArea" text="Очистить" />
                         <MenuItem fx:id="exit" mnemonicParsing="false" onAction="#onActionProperty" text="Выход" />
                   </items>

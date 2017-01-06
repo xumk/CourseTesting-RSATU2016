@@ -17,17 +17,17 @@ import org.hibernate.cfg.Configuration;
  */
 public class DataBaseService {
 
-    private static final String HIBERNATE_SHOW_SQL = "false";
-    private static final String HIBERNATE_HBM2DDL_AUTO = "update";
-    private static final String HIBERNATE_DIALECT = "org.hibernate.dialect.SQLiteDialect";
-    private static final String HIBERNATE_CONNECTION_DRIVER = "org.sqlite.JDBC";
-    private final String CONNECTION_URL = "jdbc:sqlite:../database/users.db";
-    private static final String DATABASE_USERNAME = "";
-    private static final String DATABASE_PASSWORD = "";
-    private final SessionFactory sessionFactory;
-    private static DataBaseService service;
+    protected static final String HIBERNATE_SHOW_SQL = "false";
+    protected static final String HIBERNATE_HBM2DDL_AUTO = "update";
+    protected static final String HIBERNATE_DIALECT = "org.hibernate.dialect.SQLiteDialect";
+    protected static final String HIBERNATE_CONNECTION_DRIVER = "org.sqlite.JDBC";
+    protected final String CONNECTION_URL = "jdbc:sqlite:../database/users.db";
+    protected static final String DATABASE_USERNAME = "";
+    protected static final String DATABASE_PASSWORD = "";
+    protected final SessionFactory sessionFactory;
+    protected static DataBaseService service;
 
-    private DataBaseService() {
+    protected DataBaseService() {
         Configuration configuration = this.getSqliteConfiguration();
         this.sessionFactory = createSessionFactory(configuration);
     }
@@ -43,7 +43,7 @@ public class DataBaseService {
         return this.sessionFactory;
     }
 
-    private Configuration getSqliteConfiguration() {
+    protected Configuration getSqliteConfiguration() {
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
 
@@ -58,7 +58,7 @@ public class DataBaseService {
         return configuration;
     }
 
-    private static SessionFactory createSessionFactory(Configuration configuration) {
+    protected static SessionFactory createSessionFactory(Configuration configuration) {
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         StandardServiceRegistry serviceRegistry = builder.build();

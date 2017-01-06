@@ -264,7 +264,6 @@ public class MainWindowController implements Initializable {
             stage = new Stage();
             stage.setTitle("Добро пожаловать,  Неизвестный");
         }
-        ;
         stage.setOnCloseRequest(we -> sessionFactory.close());
     }
 
@@ -313,7 +312,7 @@ public class MainWindowController implements Initializable {
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(stage);//Указываем текущую сцену
         boolean result = FileWorker.writeFile(file, textArea.getText());
-        Alert alert = result ? new ErrorAlert("Ошибка записи в файл: Смотрите лог")
+        Alert alert = !result ? new ErrorAlert("Ошибка записи в файл: Смотрите лог")
                 : new InformAlert("Текст записан в файл");
         alert.showAndWait();
     }
